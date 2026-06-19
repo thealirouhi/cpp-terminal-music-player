@@ -10,8 +10,10 @@
 #include "M3uLoader.h"
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 Playlist* M3uLoader::loadPlaylist(const string& filePath,
                                   const MusicLibrary& library)
@@ -54,4 +56,26 @@ Playlist* M3uLoader::loadPlaylist(const string& filePath,
 
     file.close();
     return playlist;
+}
+
+vector<Playlist*> M3uLoader::loadAllPlaylists(const string& dirPath,
+                                               const MusicLibrary& library)
+{
+    vector<Playlist*> playlists;
+
+    if (!fs::exists(dirPath) || !fs::is_directory(dirPath)) {
+        cerr << "Error: Playlist directory not found: " << dirPath << endl;
+        return playlists;
+    }
+
+    for (const auto& entry : fs::directory_iterator(dirPath)) {
+        if (entry.path().extension() == ".m3u") {
+            Playlist* playlist = loadPlaylist(entry.path().string(), library);
+            if (playlist != nullptr) {
+                playlists.push_back(playlist);
+            }
+        }
+    }
+
+    return playlists;
 }
