@@ -13,7 +13,7 @@
 PlaylistListScreen::PlaylistListScreen(UIRenderer& renderer,
     InputHandler& input, vector<Playlist*>& playlists, int& activeIndex)
     : renderer_(renderer), input_(input),
-      playlists_(playlists), activeIndex_(activeIndex)
+      playlists_(playlists), activeIndex_(activeIndex), exited_(false)
 {
 }
 
@@ -48,6 +48,7 @@ void PlaylistListScreen::handleInput()
     int choice = input_.readInt(0, static_cast<int>(playlists_.size()));
 
     if (choice == 0) {
+        exited_ = true;
         return;
     }
 
@@ -56,3 +57,6 @@ void PlaylistListScreen::handleInput()
         activeIndex_ = newIndex;
     }
 }
+
+bool PlaylistListScreen::hasExited() const { return exited_; }
+void PlaylistListScreen::resetExit() { exited_ = false; }

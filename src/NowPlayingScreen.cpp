@@ -12,7 +12,7 @@
 
 NowPlayingScreen::NowPlayingScreen(UIRenderer& renderer,
                                    InputHandler& input, Player& player)
-    : renderer_(renderer), input_(input), player_(player)
+    : renderer_(renderer), input_(input), player_(player), exited_(false)
 {
 }
 
@@ -68,9 +68,12 @@ void NowPlayingScreen::handleInput()
     } else if (key == "s") {
         player_.stop();
     } else if (key == "q") {
-        // Back to main menu
+        exited_ = true;
     }
 }
+
+bool NowPlayingScreen::hasExited() const { return exited_; }
+void NowPlayingScreen::resetExit() { exited_ = false; }
 
 string NowPlayingScreen::stateLabel() const
 {

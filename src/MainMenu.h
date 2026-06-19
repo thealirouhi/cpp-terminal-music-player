@@ -24,6 +24,8 @@ public:
 
     void render() override;
     void handleInput() override;
+    bool hasExited() const override;
+    void resetExit() override;
 
     int getSelectedOption() const;
 
@@ -32,6 +34,7 @@ private:
     InputHandler& input_;
     string lastPlayed_;
     int selectedOption_;
+    bool exited_;
 };
 
 #endif

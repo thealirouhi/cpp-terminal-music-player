@@ -12,7 +12,7 @@
 
 SettingsScreen::SettingsScreen(UIRenderer& renderer,
                                InputHandler& input, Player& player)
-    : renderer_(renderer), input_(input), player_(player)
+    : renderer_(renderer), input_(input), player_(player), exited_(false)
 {
 }
 
@@ -48,9 +48,14 @@ void SettingsScreen::handleInput()
         case 2: player_.setMode(Player::REPEAT_ONE);  break;
         case 3: player_.setMode(Player::REPEAT_ALL);  break;
         case 4: player_.setMode(Player::SHUFFLE);     break;
-        case 0: return;
+        case 0:
+            exited_ = true;
+            return;
     }
 }
+
+bool SettingsScreen::hasExited() const { return exited_; }
+void SettingsScreen::resetExit() { exited_ = false; }
 
 string SettingsScreen::modeDescription(Player::PlaybackMode mode) const
 {

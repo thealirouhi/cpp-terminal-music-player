@@ -16,8 +16,8 @@ PlaylistViewScreen::PlaylistViewScreen(UIRenderer& renderer,
     InputHandler& input, Player& player, Playlist*& currentPlaylist)
     : renderer_(renderer), input_(input), player_(player),
       currentPlaylist_(currentPlaylist),
-      searchMode_(false), sortField_(0), sortAscending_(true),
-      selectedSongIndex_(-1)
+      exited_(false), searchMode_(false), sortField_(0),
+      sortAscending_(true), selectedSongIndex_(-1)
 {
 }
 
@@ -87,7 +87,7 @@ void PlaylistViewScreen::handleInput()
     } else if (key == "s") {
         enterSortMode();
     } else if (key == "0") {
-        // Back to main menu
+        exited_ = true;
         selectedSongIndex_ = -1;
         return;
     } else {
@@ -204,3 +204,6 @@ void PlaylistViewScreen::applySearch()
             }),
         displayedSongs_.end());
 }
+
+bool PlaylistViewScreen::hasExited() const { return exited_; }
+void PlaylistViewScreen::resetExit() { exited_ = false; }

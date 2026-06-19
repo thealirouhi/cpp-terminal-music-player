@@ -15,7 +15,8 @@ MainMenu::MainMenu(UIRenderer& renderer, InputHandler& input,
     : renderer_(renderer),
       input_(input),
       lastPlayed_(lastPlayed),
-      selectedOption_(-1)
+      selectedOption_(-1),
+      exited_(false)
 {
 }
 
@@ -44,6 +45,16 @@ void MainMenu::render()
 void MainMenu::handleInput()
 {
     selectedOption_ = input_.readInt(0, 4);
+}
+
+bool MainMenu::hasExited() const
+{
+    return selectedOption_ == 0;
+}
+
+void MainMenu::resetExit()
+{
+    selectedOption_ = -1;
 }
 
 int MainMenu::getSelectedOption() const

@@ -25,11 +25,14 @@ public:
 
     void render() override;
     void handleInput() override;
+    bool hasExited() const override;
+    void resetExit() override;
 
 private:
     UIRenderer& renderer_;
     InputHandler& input_;
     Player& player_;
+    bool exited_;
 
     string modeDescription(Player::PlaybackMode mode) const;
 };
