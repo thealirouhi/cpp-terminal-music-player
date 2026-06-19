@@ -152,6 +152,18 @@ void Player::previous()
     }
 }
 
+void Player::playSongAt(int index)
+{
+    if (playlist_ == nullptr) return;
+
+    stop();
+    currentSongIndex_ = index;
+    currentSong_ = playlist_->getSong(index);
+    if (currentSong_ != nullptr) {
+        startCurrentSong();
+    }
+}
+
 // ========== Mode controls ==========
 
 void Player::setMode(PlaybackMode mode)

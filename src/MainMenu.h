@@ -24,6 +24,8 @@ public:
 
     void render() override;
     void handleInput() override;
+    bool hasExited() const override;
+    void resetExit() override;
 
     int getSelectedOption() const;
 
