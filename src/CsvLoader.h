@@ -12,6 +12,8 @@
 
 #include <string>
 #include <vector>
+using namespace std;
+
 #include "Song.h"
 
 class CsvLoader
@@ -19,7 +21,7 @@ class CsvLoader
 public:
     /// Reads library.csv from the given path and returns a vector of Song pointers.
     /// Returns an empty vector on failure (file not found, empty file, etc.).
-    std::vector<Song*> loadSongs(const std::string& filePath);
+    vector<Song*> loadSongs(const string& filePath);
 };
 
 #endif
