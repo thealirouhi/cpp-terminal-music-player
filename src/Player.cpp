@@ -32,6 +32,8 @@ Player::Player()
     if (result != MA_SUCCESS) {
         cerr << "Error: Failed to initialize audio engine." << endl;
     }
+
+    sound_ = new (nothrow) ma_sound();
 }
 
 Player::~Player()
@@ -41,6 +43,7 @@ Player::~Player()
         ma_engine_uninit(engine_);
         delete engine_;
     }
+    delete sound_;
 }
 
 // ========== Private helpers ==========
@@ -60,7 +63,12 @@ void Player::startCurrentSong()
     clearSound();
 
     // Build the full path: the file paths in CSV are relative (e.g. "Musics/...")
-    string filePath = "Data/" + currentSong_->getFilePath();
+    // Normalize prefix: CSV stores "Musics/" but actual directory is "music/"
+    string relPath = currentSong_->getFilePath();
+    if (relPath.rfind("Musics/", 0) == 0) {
+        relPath.replace(0, 7, "music/");
+    }
+    string filePath = "Data/" + relPath;
 
     ma_result result = ma_sound_init_from_file(engine_, filePath.c_str(),
                                                0, nullptr, nullptr, sound_);
