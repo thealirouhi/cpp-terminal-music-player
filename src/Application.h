@@ -67,8 +67,9 @@ private:
     Screen* screens_[6];
     ScreenId currentScreen_;
 
-    // Active playlist index
+    // Active playlist
     int activePlaylistIndex_;
+    Playlist* currentPlaylist_;
 
     // Filter state
     bool filterActive_;
@@ -80,8 +81,6 @@ private:
     // Internal methods
     void loadData();
     void saveState();
-    ScreenId routeInput(ScreenId current);
-    ScreenId resolveScreenTransition(ScreenId current, int inputResult);
 };
 
 #endif
