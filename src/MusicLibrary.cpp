@@ -19,6 +19,14 @@ int MusicLibrary::getSongCount() const
     return static_cast<int>(songs_.size());
 }
 
+Song* MusicLibrary::getSong(int index) const
+{
+    if (index < 0 || index >= static_cast<int>(songs_.size())) {
+        return nullptr;
+    }
+    return songs_[index];
+}
+
 const vector<Song*>& MusicLibrary::getAllSongs() const
 {
     return songs_;
