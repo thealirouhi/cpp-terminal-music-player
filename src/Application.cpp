@@ -125,15 +125,18 @@ void Application::run()
                 case 0: currentScreen_ = SCREEN_QUIT; break;
             }
         } else if (currentScreen_ == SCREEN_PLAYLIST_LIST) {
-            if (screens_[currentScreen_]->hasExited()) {
-                // Update current playlist pointer after any selection
-                if (activePlaylistIndex_ >= 0 &&
-                    activePlaylistIndex_ < static_cast<int>(playlists_.size())) {
-                    if (currentPlaylist_ != playlists_[activePlaylistIndex_]) {
-                        currentPlaylist_ = playlists_[activePlaylistIndex_];
-                        player_.setPlaylist(currentPlaylist_);
-                    }
+            // Update current playlist pointer immediately on every loop
+            if (activePlaylistIndex_ >= 0 &&
+                activePlaylistIndex_ < static_cast<int>(playlists_.size())) {
+                if (currentPlaylist_ != playlists_[activePlaylistIndex_]) {
+                    currentPlaylist_ = playlists_[activePlaylistIndex_];
+                    player_.setPlaylist(currentPlaylist_);
+                    // Auto-play the first song from the new playlist
+                    player_.playSongAt(0);
                 }
+            }
+
+            if (screens_[currentScreen_]->hasExited()) {
                 screens_[currentScreen_]->resetExit();
                 currentScreen_ = SCREEN_MAIN_MENU;
             }
@@ -153,11 +156,17 @@ void Application::run()
                 view->resetExit();
                 currentScreen_ = SCREEN_FILTER;
             } else {
-                int songIndex = view->getSelectedSongIndex();
-                if (songIndex >= 0) {
-                    if (currentPlaylist_ != nullptr) {
-                        player_.setPlaylist(currentPlaylist_);
-                        player_.playSongAt(songIndex);
+                Song* selectedSong = view->getSelectedSong();
+                if (selectedSong != nullptr && currentPlaylist_ != nullptr) {
+                    // Find the song's actual position in the playlist
+                    // (displayedSongs_ may be sorted differently)
+                    const auto& allSongs = currentPlaylist_->getSongs();
+                    for (size_t i = 0; i < allSongs.size(); i++) {
+                        if (allSongs[i] == selectedSong) {
+                            player_.setPlaylist(currentPlaylist_);
+                            player_.playSongAt(static_cast<int>(i));
+                            break;
+                        }
                     }
                     currentScreen_ = SCREEN_NOW_PLAYING;
                 }

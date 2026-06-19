@@ -31,6 +31,7 @@ public:
     void resetExit() override;
 
     int getSelectedSongIndex() const;
+    Song* getSelectedSong() const;
     bool getWantsFilter() const;
     void refreshDisplayedSongs();
 

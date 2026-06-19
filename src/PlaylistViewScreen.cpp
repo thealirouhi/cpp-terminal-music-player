@@ -115,6 +115,15 @@ int PlaylistViewScreen::getSelectedSongIndex() const
     return selectedSongIndex_;
 }
 
+Song* PlaylistViewScreen::getSelectedSong() const
+{
+    if (selectedSongIndex_ < 0 ||
+        selectedSongIndex_ >= static_cast<int>(displayedSongs_.size())) {
+        return nullptr;
+    }
+    return displayedSongs_[selectedSongIndex_];
+}
+
 void PlaylistViewScreen::refreshDisplayedSongs()
 {
     if (currentPlaylist_ == nullptr) {
