@@ -77,7 +77,6 @@ void FilterScreen::handleInput()
     if (choice == 0) {
         filterType_ = 0;
         filterApplied_ = false;
-        exited_ = true;
         return;
     }
 
@@ -91,6 +90,7 @@ void FilterScreen::handleInput()
             applyAlbumFilter(selectedFilter_);
         }
         filterApplied_ = true;
+        exited_ = true;
     }
 }
 

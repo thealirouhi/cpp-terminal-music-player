@@ -139,17 +139,58 @@ void Application::run()
             }
         } else if (currentScreen_ == SCREEN_PLAYLIST_VIEW) {
             auto* view = static_cast<PlaylistViewScreen*>(screens_[3]);
-            int songIndex = view->getSelectedSongIndex();
 
             if (view->hasExited()) {
+                // Restore original playlist if filter was active
+                if (filterActive_ && !playlists_.empty()) {
+                    currentPlaylist_ = playlists_[activePlaylistIndex_];
+                    player_.setPlaylist(currentPlaylist_);
+                    filterActive_ = false;
+                }
                 view->resetExit();
                 currentScreen_ = SCREEN_MAIN_MENU;
-            } else if (songIndex >= 0) {
-                if (currentPlaylist_ != nullptr) {
-                    player_.setPlaylist(currentPlaylist_);
-                    player_.playSongAt(songIndex);
+            } else if (view->getWantsFilter()) {
+                view->resetExit();
+                currentScreen_ = SCREEN_FILTER;
+            } else {
+                int songIndex = view->getSelectedSongIndex();
+                if (songIndex >= 0) {
+                    if (currentPlaylist_ != nullptr) {
+                        player_.setPlaylist(currentPlaylist_);
+                        player_.playSongAt(songIndex);
+                    }
+                    currentScreen_ = SCREEN_NOW_PLAYING;
                 }
-                currentScreen_ = SCREEN_NOW_PLAYING;
+            }
+        } else if (currentScreen_ == SCREEN_FILTER) {
+            if (screens_[currentScreen_]->hasExited()) {
+                auto* filter = static_cast<FilterScreen*>(screens_[4]);
+
+                // Check if a filter was applied
+                const vector<Song*>& filteredSongs =
+                    filter->getFilteredSongs();
+                if (!filteredSongs.empty()) {
+                    // Create a temporary filtered playlist
+                    delete filteredPlaylist_;
+                    filteredPlaylist_ = new Playlist("Filtered");
+                    for (Song* song : filteredSongs) {
+                        filteredPlaylist_->addSong(song);
+                    }
+                    currentPlaylist_ = filteredPlaylist_;
+                    player_.setPlaylist(currentPlaylist_);
+                    filterActive_ = true;
+                } else if (filterActive_ && !playlists_.empty()) {
+                    // No filter applied but filter was previously active — restore
+                    currentPlaylist_ = playlists_[activePlaylistIndex_];
+                    player_.setPlaylist(currentPlaylist_);
+                    filterActive_ = false;
+                }
+
+                screens_[currentScreen_]->resetExit();
+                currentScreen_ = SCREEN_PLAYLIST_VIEW;
+                // Refresh browse to show (un)filtered songs
+                static_cast<PlaylistViewScreen*>(screens_[3])
+                    ->refreshDisplayedSongs();
             }
         } else if (screens_[currentScreen_]->hasExited()) {
             screens_[currentScreen_]->resetExit();
