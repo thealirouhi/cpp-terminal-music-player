@@ -3,6 +3,7 @@
 
 # Compiled binaries
 a.out
+music_player
 
 # Playlist files (reference local media paths)
 Data/Playlists/*.m3u
