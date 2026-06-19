@@ -16,8 +16,8 @@ PlaylistViewScreen::PlaylistViewScreen(UIRenderer& renderer,
     InputHandler& input, Player& player, Playlist*& currentPlaylist)
     : renderer_(renderer), input_(input), player_(player),
       currentPlaylist_(currentPlaylist),
-      exited_(false), searchMode_(false), sortField_(0),
-      sortAscending_(true), selectedSongIndex_(-1)
+      exited_(false), wantsFilter_(false), searchMode_(false),
+      sortField_(0), sortAscending_(true), selectedSongIndex_(-1)
 {
 }
 
@@ -67,7 +67,7 @@ void PlaylistViewScreen::render()
     if (searchMode_) {
         renderer_.printPrompt("Search: ");
     } else {
-        renderer_.drawTextLine("[num] play  [s] sort  [/] search  [0] back");
+        renderer_.drawTextLine("[num] play  [s] sort  [/] search  [f] filter  [0] back");
     }
 
     renderer_.drawBottomBorder();
@@ -84,6 +84,10 @@ void PlaylistViewScreen::handleInput()
 
     if (key == "/") {
         enterSearchMode();
+    } else if (key == "f") {
+        wantsFilter_ = true;
+        return;
+
     } else if (key == "s") {
         enterSortMode();
     } else if (key == "0") {
@@ -206,4 +210,6 @@ void PlaylistViewScreen::applySearch()
 }
 
 bool PlaylistViewScreen::hasExited() const { return exited_; }
-void PlaylistViewScreen::resetExit() { exited_ = false; }
+void PlaylistViewScreen::resetExit() { exited_ = false; wantsFilter_ = false; }
+
+bool PlaylistViewScreen::getWantsFilter() const { return wantsFilter_; }
