@@ -7,6 +7,9 @@ a.out
 # Playlist files (reference local media paths)
 Data/Playlists/*.m3u
 
+# VS Code IDE settings
+.vscode/
+
 # Media files (large binaries — share separately)
 Data/music/*.mp3
 Data/music/*.MP3
