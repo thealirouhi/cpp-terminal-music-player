@@ -54,3 +54,32 @@ void ConfigManager::load(const string& filePath)
 
     file.close();
 }
+
+string ConfigManager::get(const string& key) const
+{
+    auto it = settings_.find(key);
+    if (it != settings_.end()) {
+        return it->second;
+    }
+    return "";
+}
+
+void ConfigManager::set(const string& key, const string& value)
+{
+    settings_[key] = value;
+}
+
+void ConfigManager::save(const string& filePath) const
+{
+    ofstream file(filePath);
+    if (!file.is_open()) {
+        cerr << "Error: Could not write to settings file: " << filePath << endl;
+        return;
+    }
+
+    for (const auto& pair : settings_) {
+        file << pair.first << "=" << pair.second << "\n";
+    }
+
+    file.close();
+}
