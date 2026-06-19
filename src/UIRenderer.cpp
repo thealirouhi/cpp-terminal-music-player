@@ -87,6 +87,27 @@ void UIRenderer::printPrompt(const string& message) const
     cout << message;
 }
 
+void UIRenderer::printSongRow(int index, const Song& song) const
+{
+    cout << "║ " << left
+         << setw(3) << index << " "
+         << setw(27) << truncate(song.getTitle(), 26) << " "
+         << setw(16) << truncate(song.getArtist(), 15) << " "
+         << right << setw(2) << setfill('0')
+         << (song.getDurationSec() / 60) << ":"
+         << setw(2) << (song.getDurationSec() % 60)
+         << setfill(' ') << " ║" << endl;
+}
+
+void UIRenderer::printSimpleSongRow(int index, const Song& song) const
+{
+    cout << "║ " << left
+         << setw(3) << index << "  "
+         << setw(30) << truncate(song.getTitle(), 29) << " "
+         << truncate(song.getArtist(), 20)
+         << " ║" << endl;
+}
+
 string UIRenderer::truncate(const string& text, int maxLen) const
 {
     if (static_cast<int>(text.length()) <= maxLen) return text;
