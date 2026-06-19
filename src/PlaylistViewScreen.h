@@ -47,7 +47,6 @@ private:
     bool sortAscending_;
     int selectedSongIndex_;
 
-    void refreshDisplayedSongs();
     void enterSearchMode();
     void enterSortMode();
     void applySort();
