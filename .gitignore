@@ -1,0 +1,14 @@
+# macOS system files
+.DS_Store
+
+# Compiled binaries
+a.out
+
+# Playlist files (reference local media paths)
+Data/Playlists/*.m3u
+
+# Media files (large binaries — share separately)
+Data/music/*.mp3
+Data/music/*.MP3
+Data/music/*.wav
+Data/music/*.flac
