@@ -99,3 +99,87 @@ void Application::loadData()
         else if (modeStr == "SHUFFLE")     player_.setMode(Player::SHUFFLE);
     }
 }
+
+void Application::run()
+{
+    while (currentScreen_ != SCREEN_QUIT) {
+        // Render current screen
+        screens_[currentScreen_]->render();
+
+        // Handle input on current screen
+        screens_[currentScreen_]->handleInput();
+
+        // Navigate based on screen and user input
+        switch (currentScreen_) {
+            case SCREEN_MAIN_MENU: {
+                int opt = static_cast<MainMenu*>(screens_[0])
+                          ->getSelectedOption();
+                switch (opt) {
+                    case 1: currentScreen_ = SCREEN_NOW_PLAYING; break;
+                    case 2: currentScreen_ = SCREEN_PLAYLIST_LIST; break;
+                    case 3: currentScreen_ = SCREEN_PLAYLIST_VIEW; break;
+                    case 4: currentScreen_ = SCREEN_SETTINGS; break;
+                    case 0: currentScreen_ = SCREEN_QUIT; break;
+                }
+                break;
+            }
+            case SCREEN_NOW_PLAYING:
+                // NowPlayingScreen returns to main menu after 'q'
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            case SCREEN_PLAYLIST_LIST:
+                // After playlist selection or '0', back to main menu
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            case SCREEN_PLAYLIST_VIEW:
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            case SCREEN_FILTER:
+                currentScreen_ = SCREEN_PLAYLIST_VIEW;
+                break;
+
+            case SCREEN_SETTINGS:
+                // Settings returns to main menu after '0'
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            default:
+                currentScreen_ = SCREEN_QUIT;
+                break;
+        }
+
+        // Let the player check if current song ended
+        player_.tick();
+    }
+
+    saveState();
+}
+
+void Application::saveState()
+{
+    // Save active playlist
+    if (activePlaylistIndex_ >= 0 &&
+        activePlaylistIndex_ < static_cast<int>(playlists_.size())) {
+        config_.set("active_playlist",
+                    playlists_[activePlaylistIndex_]->getName());
+    }
+
+    // Save playback mode
+    switch (player_.getMode()) {
+        case Player::NO_REPEAT:  config_.set("playback_mode", "NO_REPEAT"); break;
+        case Player::REPEAT_ONE: config_.set("playback_mode", "REPEAT_ONE"); break;
+        case Player::REPEAT_ALL: config_.set("playback_mode", "REPEAT_ALL"); break;
+        case Player::SHUFFLE:    config_.set("playback_mode", "SHUFFLE"); break;
+    }
+
+    // Save last played song
+    Song* current = player_.getCurrentSong();
+    if (current != nullptr) {
+        config_.set("last_song", current->getTitle() + " — " + current->getArtist());
+    }
+
+    config_.save(dataDir_ + "/settings.cfg");
+}
