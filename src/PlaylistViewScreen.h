@@ -31,6 +31,7 @@ public:
     void resetExit() override;
 
     int getSelectedSongIndex() const;
+    void refreshDisplayedSongs();
 
 private:
     UIRenderer& renderer_;
