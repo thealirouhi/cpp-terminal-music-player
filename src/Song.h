@@ -2,32 +2,32 @@
 #define SONG_H
 
 #include <string>
+using namespace std;
 
 class Song
 {
 private:
-    std::string title_;
-    std::string artist_;
-    std::string album_;
-    std::string genre_;
-    int year_;
-    int durationSec_;
-    std::string filePath_;
+    string title;
+    string artist;
+    string album;
+    string genre;
+    int year;
+    int durationSec;
+    string filePath;
 
 public:
-    Song(std::string title, std::string artist, std::string album,
-         std::string genre, int year, int durationSec, std::string filePath);
+    Song(string title, string artist, string album,
+         string genre, int year, int durationSec, string filePath);
 
-    std::string getTitle() const;
-    std::string getArtist() const;
-    std::string getAlbum() const;
-    std::string getGenre() const;
+    string getTitle() const;
+    string getArtist() const;
+    string getAlbum() const;
+    string getGenre() const;
     int getYear() const;
     int getDurationSec() const;
-    std::string getFilePath() const;
+    string getFilePath() const;
 
-    /// Returns duration as "MM:SS" string.
-    std::string getFormattedDuration() const;
+    string getFormattedDuration() const;
 };
 
 #endif
