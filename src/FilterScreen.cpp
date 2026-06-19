@@ -15,7 +15,7 @@ FilterScreen::FilterScreen(UIRenderer& renderer, InputHandler& input,
                            MusicLibrary& library, Playlist*& currentPlaylist)
     : renderer_(renderer), input_(input), library_(library),
       currentPlaylist_(currentPlaylist),
-      exited_(false), filterType_(0), filterApplied_(false)
+      filterType_(0), filterApplied_(false)
 {
 }
 
@@ -65,9 +65,8 @@ void FilterScreen::handleInput()
         } else if (choice == 2) {
             filterType_ = 2;
             collectUniqueAlbums();
-        } else {
-            exited_ = true;
         }
+        // choice 0: back, handled by returning
         return;
     }
 
@@ -77,7 +76,6 @@ void FilterScreen::handleInput()
     if (choice == 0) {
         filterType_ = 0;
         filterApplied_ = false;
-        exited_ = true;
         return;
     }
 
@@ -143,8 +141,5 @@ Playlist* FilterScreen::getFilteredPlaylist() const
         return nullptr;
     }
 
-    return nullptr;
+    return nullptr;  // The Application will handle this
 }
-
-bool FilterScreen::hasExited() const { return exited_; }
-void FilterScreen::resetExit() { exited_ = false; }

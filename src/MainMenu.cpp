@@ -46,16 +46,6 @@ void MainMenu::handleInput()
     selectedOption_ = input_.readInt(0, 4);
 }
 
-bool MainMenu::hasExited() const
-{
-    return selectedOption_ == 0;
-}
-
-void MainMenu::resetExit()
-{
-    selectedOption_ = -1;
-}
-
 int MainMenu::getSelectedOption() const
 {
     return selectedOption_;

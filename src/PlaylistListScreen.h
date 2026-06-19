@@ -26,15 +26,12 @@ public:
 
     void render() override;
     void handleInput() override;
-    bool hasExited() const override;
-    void resetExit() override;
 
 private:
     UIRenderer& renderer_;
     InputHandler& input_;
     vector<Playlist*>& playlists_;
     int& activeIndex_;
-    bool exited_;
 };
 
 #endif

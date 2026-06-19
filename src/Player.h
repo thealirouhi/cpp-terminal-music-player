@@ -45,7 +45,6 @@ public:
     void stop();
     void next();
     void previous();
-    void playSongAt(int index);
 
     // --- Playlist management ---
     void setPlaylist(Playlist* playlist);

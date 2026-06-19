@@ -27,8 +27,6 @@ public:
 
     void render() override;
     void handleInput() override;
-    bool hasExited() const override;
-    void resetExit() override;
 
     const vector<Song*>& getFilteredSongs() const;
     Playlist* getFilteredPlaylist() const;
@@ -39,7 +37,6 @@ private:
     MusicLibrary& library_;
     Playlist*& currentPlaylist_;
 
-    bool exited_;
     int filterType_;          // 1 = artist, 2 = album, 0 = none
     vector<string> filterValues_;
     vector<Song*> filteredSongs_;

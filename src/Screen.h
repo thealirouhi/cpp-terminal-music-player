@@ -15,8 +15,6 @@ class Screen
 public:
     virtual void render() = 0;
     virtual void handleInput() = 0;
-    virtual bool hasExited() const = 0;
-    virtual void resetExit() = 0;
     virtual ~Screen() = default;
 };
 

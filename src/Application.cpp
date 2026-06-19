@@ -110,46 +110,45 @@ void Application::run()
         screens_[currentScreen_]->handleInput();
 
         // Navigate based on screen and user input
-        if (currentScreen_ == SCREEN_MAIN_MENU) {
-            int opt = static_cast<MainMenu*>(screens_[0])
-                      ->getSelectedOption();
-            switch (opt) {
-                case 1: currentScreen_ = SCREEN_NOW_PLAYING; break;
-                case 2: currentScreen_ = SCREEN_PLAYLIST_LIST; break;
-                case 3: currentScreen_ = SCREEN_PLAYLIST_VIEW; break;
-                case 4: currentScreen_ = SCREEN_SETTINGS; break;
-                case 0: currentScreen_ = SCREEN_QUIT; break;
-            }
-        } else if (currentScreen_ == SCREEN_PLAYLIST_LIST) {
-            if (screens_[currentScreen_]->hasExited()) {
-                // Update current playlist pointer after any selection
-                if (activePlaylistIndex_ >= 0 &&
-                    activePlaylistIndex_ < static_cast<int>(playlists_.size())) {
-                    if (currentPlaylist_ != playlists_[activePlaylistIndex_]) {
-                        currentPlaylist_ = playlists_[activePlaylistIndex_];
-                        player_.setPlaylist(currentPlaylist_);
-                    }
+        switch (currentScreen_) {
+            case SCREEN_MAIN_MENU: {
+                int opt = static_cast<MainMenu*>(screens_[0])
+                          ->getSelectedOption();
+                switch (opt) {
+                    case 1: currentScreen_ = SCREEN_NOW_PLAYING; break;
+                    case 2: currentScreen_ = SCREEN_PLAYLIST_LIST; break;
+                    case 3: currentScreen_ = SCREEN_PLAYLIST_VIEW; break;
+                    case 4: currentScreen_ = SCREEN_SETTINGS; break;
+                    case 0: currentScreen_ = SCREEN_QUIT; break;
                 }
-                screens_[currentScreen_]->resetExit();
-                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
             }
-        } else if (currentScreen_ == SCREEN_PLAYLIST_VIEW) {
-            auto* view = static_cast<PlaylistViewScreen*>(screens_[3]);
-            int songIndex = view->getSelectedSongIndex();
+            case SCREEN_NOW_PLAYING:
+                // NowPlayingScreen returns to main menu after 'q'
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
 
-            if (view->hasExited()) {
-                view->resetExit();
+            case SCREEN_PLAYLIST_LIST:
+                // After playlist selection or '0', back to main menu
                 currentScreen_ = SCREEN_MAIN_MENU;
-            } else if (songIndex >= 0) {
-                if (currentPlaylist_ != nullptr) {
-                    player_.setPlaylist(currentPlaylist_);
-                    player_.playSongAt(songIndex);
-                }
-                currentScreen_ = SCREEN_NOW_PLAYING;
-            }
-        } else if (screens_[currentScreen_]->hasExited()) {
-            screens_[currentScreen_]->resetExit();
-            currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            case SCREEN_PLAYLIST_VIEW:
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            case SCREEN_FILTER:
+                currentScreen_ = SCREEN_PLAYLIST_VIEW;
+                break;
+
+            case SCREEN_SETTINGS:
+                // Settings returns to main menu after '0'
+                currentScreen_ = SCREEN_MAIN_MENU;
+                break;
+
+            default:
+                currentScreen_ = SCREEN_QUIT;
+                break;
         }
 
         // Let the player check if current song ended

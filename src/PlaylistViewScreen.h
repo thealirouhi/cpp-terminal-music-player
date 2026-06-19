@@ -27,8 +27,6 @@ public:
 
     void render() override;
     void handleInput() override;
-    bool hasExited() const override;
-    void resetExit() override;
 
     int getSelectedSongIndex() const;
 
@@ -39,7 +37,6 @@ private:
     Playlist*& currentPlaylist_;
 
     vector<Song*> displayedSongs_;
-    bool exited_;
     bool searchMode_;
     string searchQuery_;
     int sortField_;    // 0=default, 1=title, 2=artist, 3=album, 4=year, 5=duration
