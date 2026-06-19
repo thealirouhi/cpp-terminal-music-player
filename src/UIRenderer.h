@@ -25,8 +25,8 @@ public:
     void clearScreen() const;
 
     /// Draws a horizontal divider line with optional label in the middle.
-    void drawDivider(char corner, char horizontal, char vertical,
-                     const string& label = "") const;
+    void drawDivider(const string& left, const string& horizontal,
+                     const string& right, const string& label = "") const;
 
     /// Draws a full box with top, bottom, and content lines.
     void drawTopBorder() const;
