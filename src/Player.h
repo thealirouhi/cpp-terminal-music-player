@@ -16,6 +16,9 @@ using namespace std;
 #include "Song.h"
 #include "Playlist.h"
 
+struct ma_engine;
+struct ma_sound;
+
 class Player
 {
 public:
@@ -68,6 +71,9 @@ public:
     void seekBy(int seconds);
 
 private:
+    ma_engine* engine_;
+    ma_sound* sound_;
+
     PlaybackState state_;
     PlaybackMode mode_;
     Playlist* playlist_;
