@@ -19,3 +19,15 @@ std::string Song::getGenre() const { return genre_; }
 int Song::getYear() const { return year_; }
 int Song::getDurationSec() const { return durationSec_; }
 std::string Song::getFilePath() const { return filePath_; }
+
+std::string Song::getFormattedDuration() const
+{
+    int mins = durationSec_ / 60;
+    int secs = durationSec_ % 60;
+    std::string result;
+    if (mins < 10) result += "0";
+    result += std::to_string(mins) + ":";
+    if (secs < 10) result += "0";
+    result += std::to_string(secs);
+    return result;
+}

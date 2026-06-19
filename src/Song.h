@@ -25,6 +25,9 @@ public:
     int getYear() const;
     int getDurationSec() const;
     std::string getFilePath() const;
+
+    /// Returns duration as "MM:SS" string.
+    std::string getFormattedDuration() const;
 };
 
 #endif
