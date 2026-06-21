@@ -241,7 +241,10 @@ void Player::advanceToNext()
             if (mode_ == REPEAT_ALL) {
                 nextIndex = 0;
             } else {
-                nextIndex = 0;
+                currentSong_ = nullptr;
+                currentSongIndex_ = -1;
+                state_ = STOPPED;
+                return;
             }
         }
     }
